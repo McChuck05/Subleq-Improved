@@ -1,0 +1,71 @@
+# Subleq Improved test 1
+Start
+. Z: 0
+. M1: -1
+. P1: 1
+
+Start:
+Message1 ! !        # Push
+Z ! PRINT           # JSR
+Message2 ! !        # Push
+Z ! PRINT           # JSR
+
+
+/copy Message4 Message5
+/push Message3      # Macro test
+/jsr PRINT2
+/push Message4
+/call? Z PRINT2      # Is it a good idea to have multiple handles for a macro?
+
+/i/o CR 1
+/push InputPrompt
+/call PRINT2
+/input Input1
+/print CR
+/push OutputPrompt
+/jsr? Z PRINT2
+/print SP
+/print Input1
+/io CR 1
+/print CR
+/push Message5
+/call PRINT
+
+
+/halt
+
+
+PRINT:
+! PrintChar !          # Pop
+Print_Loop:
+! ! *PrintChar         # Return?
+! *PrintChar 1         # print character
+M1 PrintChar           # advance pointer
+Z Z Print_Loop
+. PrintChar: 0
+
+
+PRINT2:
+/pop PrintChar2          # Pop
+Print_Loop2:
+/ret? *PrintChar2         # Return?
+/print *PrintChar2         # print character
+/subleq M1 PrintChar2      # advance pointer
+/jmp Print_Loop2
+. PrintChar2: 0
+
+. Message1: ? "Good morning, starshine!" 32 32 0
+
+. Message2: @+1 'The earth says, "Hello!"' 10 0
+
+. Message3: ? "These are the tests that try men's souls." 10 0
+
+. Message4: ? "I told you I'd debug, but you didn't believe me.
+Why didn't you believe me?" 10 0
+
+. InputPrompt: ? "Please press the ANY key.  " 0
+. OutputPrompt: ? "You typed:" 0
+
+. Input1: 0
+. CR: 10 SP: 32
+. Message5: 0
