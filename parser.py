@@ -56,7 +56,7 @@ class Parser:
     def strip_tokens(self, string):
         self.tokens = [token.split() for token in string.split(';') if not '#' in token and token.strip()]
         if 'ZERO:' not in sum(self.tokens, start=[]):
-            self.tokens.append(['ZERO:', '0'])
+            self.tokens.append(['.', 'ZERO:', '0'])
 
     def resolve_labels(self):
         try:
